@@ -12,7 +12,7 @@ import {FaInfoCircle} from 'react-icons/fa'
 function App() {
 
   const [tiles, setTiles] = useState([])
-	const [correctTiles, setCorrectTiles] = useState([...Array(0)].keys())
+	const [correctTiles, setCorrectTiles] = useState([...Array(2)].keys())
 	const [isCompleted, setIsCompleted] = useState(false)
 	const [moves, setMoves] = useState(0)
 	const [time, setTime] = useState(0)
@@ -196,7 +196,14 @@ function App() {
 		const greenTiles = [...correctTiles]
 		if (greenTiles.length > 0 && !greenTiles.includes(0)) {
       // worteen completed
+			setTimerRunning(false)
+      setSwapDisabled(true)
+			setTimeout(() => setIsCompleted(true), 1000)
+		}
+	}, [correctTiles])
 
+  useEffect(() => {
+    if (isCompleted) {
       const lastWorteenDate = new Date(lastWorteenCompleted)
       const now = new Date()
 
@@ -215,15 +222,6 @@ function App() {
 
         localStorage.setItem("LastWorteenCompleted", JSON.stringify(worteenDate))
       }
-
-			setTimerRunning(false)
-      setSwapDisabled(true)
-			setTimeout(() => setIsCompleted(true), 1000)
-		}
-	}, [correctTiles])
-
-  useEffect(() => {
-    if (isCompleted) {
       setSwapDisabled(true)
     }
   }, [isCompleted])
@@ -288,7 +286,7 @@ function App() {
         <h1>Worteen</h1>
         <FaInfoCircle color = {"#fff"} size = {24} onClick = {() => setShowInstructions(true)} />
       </div>
-      {!(correctTiles.length == 0 || [...correctTiles].includes(0) || isCompleted) &&
+      {!([...correctTiles].length == 0 || [...correctTiles].includes(0) || isCompleted) &&
 				<div className = "Completion-Toast">
 					<h4>{getCompliment()}</h4>
 				</div>

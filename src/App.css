@@ -20,12 +20,12 @@ body {
 }
 
 .Header h1 {
-  width: 100%;
+  position: absolute;
 }
 
 .Header svg {
   margin-left: auto;
-  margin-right: 20px;
+  margin-right: 30px;
   cursor: pointer;
 }
 
