@@ -63,6 +63,9 @@ function App() {
 			try {
 				// const localDate = new Date()
 				const response = await fetch('https://worteen-backend.vercel.app//?date=' + JSON.stringify(localDate), {
+          method: "GET",
+          mode: 'no-cors',
+					credentials: 'same-origin',
 					headers: {
 						'Accept': 'application/json',
 					}
