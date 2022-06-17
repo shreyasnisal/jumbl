@@ -1,0 +1,22 @@
+.Instructions-Popup {
+	background-color: #121213;
+	border: 1px solid #3a3a3c;
+	border-radius: 10px;
+	color: #fff;
+	padding: 20px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	max-width: 400px;
+}
+
+.Close-Btn {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.Close-Btn FaWindowClose {
+	background-color: #121213;
+}

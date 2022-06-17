@@ -1,0 +1,11 @@
+.Board {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #121213;
+	border-radius: 10px;
+	border-width: 1px;
+	border-color: #3a3a3c;
+	border-style: solid;
+}

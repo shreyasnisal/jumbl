@@ -1,0 +1,17 @@
+.Tile {
+	background-color: #b59f3b;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	position: absolute;
+}
+
+.Tile h3 {
+	color: white;
+	font-size: 36px;
+}
+
+.Tile .Green {
+	background-color: #538d4e;
+}
