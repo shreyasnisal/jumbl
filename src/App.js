@@ -34,7 +34,8 @@ function App() {
 
     // Initialize puzzle
 		const fetchData = async () => {
-      
+      localStorage.clear()
+
       if (!localStorage.getItem("GamesPlayed")) {
         setShowInstructions(true)
       }
