@@ -61,7 +61,7 @@ function App() {
 
 			try {
 				// const localDate = new Date()
-				const response = await fetch('http://localhost:8000/?date=' + JSON.stringify(localDate), {
+				const response = await fetch('https://worteen-backend.vercel.app//?date=' + JSON.stringify(localDate), {
 					headers: {
 						'Accept': 'application/json',
 					}
@@ -230,7 +230,7 @@ function App() {
 		const checkSolved = async () => {
 			try {
 				const response = await fetch(
-					"http://localhost:8000/check",
+					"https://worteen-backend.vercel.app/check",
 					{
 						method: "POST",
 						mode: 'cors',

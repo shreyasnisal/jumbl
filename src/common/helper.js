@@ -25,9 +25,3 @@ export function swap(tiles, src, dest) {
 	[tilesResult[src], tilesResult[dest]] = [tilesResult[dest], tilesResult[src]]
 	return tilesResult
 }
-
-export async function getGridConfig() {
-	const response = await fetch('http://localhost:8000/')
-	const responseJson = await response.json()
-	return responseJson.gridConfig
-}
