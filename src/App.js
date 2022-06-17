@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react'
-import logo from './logo.svg';
 import './App.css';
 import Board from './Board/Board.js'
 import Timer from './Timer/Timer.js'
@@ -62,9 +61,9 @@ function App() {
 
 			try {
 				// const localDate = new Date()
-				const response = await fetch('https://worteen-backend.vercel.app//?date=' + JSON.stringify(localDate), {
+				const response = await fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate), {
           method: "GET",
-          mode: 'no-cors',
+          mode: 'cors',
 					credentials: 'same-origin',
 					headers: {
 						'Accept': 'application/json',
