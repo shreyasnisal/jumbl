@@ -8,6 +8,7 @@ import {getTimerRunning, startStopTimer} from './common/helper.js'
 import CompletedPopup from './CompletedPopup/CompletedPopup';
 import InstructionsPopup from './InstructionsPopup/InstructionsPopup';
 import {FaInfoCircle} from 'react-icons/fa'
+import preloader from './preloader.gif'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
   const [averageTime, setAverageTime] = useState(0)
   const [averageMoves, setAverageMoves] = useState(0)
   const [showInstructions, setShowInstructions] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
 
@@ -55,6 +57,8 @@ function App() {
         setIsCompleted(JSON.parse(localStorage.getItem(dateString + "isCompleted")))
         // setWorteenDate(dateString)
 
+        setLoading(false)
+
         return
       }
 
@@ -72,7 +76,10 @@ function App() {
 				setTiles(JSON.parse(responseJson))
         setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
         localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
-			}
+        if (responseJson.length > 0) {
+          setLoading(false)
+        }
+      }
 			catch (err) {
 				console.log(err)
 			}
@@ -97,6 +104,10 @@ function App() {
     const saveData = () => {
 
       if (!worteenDate) {
+        return
+      }
+
+      if (tiles.length === 0) {
         return
       }
 
@@ -279,6 +290,14 @@ function App() {
 		setCompliment(complimentArr[complimentIndex])
 		return complimentArr[complimentIndex]
 	}
+
+  if (loading) {
+    return (
+      <div className = "Fullscreen">
+        <img src = {preloader} className = "Preloader" />
+      </div>
+    )
+  }
 
   return (
     <div className = "App">
