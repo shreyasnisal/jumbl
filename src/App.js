@@ -10,6 +10,7 @@ import InstructionsPopup from './InstructionsPopup/InstructionsPopup';
 import {FaInfoCircle} from 'react-icons/fa'
 import preloader from './preloader.gif'
 
+
 function App() {
 
   const [tiles, setTiles] = useState([])

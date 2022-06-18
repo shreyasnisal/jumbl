@@ -2,6 +2,8 @@ import {useState, useEffect} from 'react'
 import './CompletedPopup.css'
 import {FaShareAlt} from 'react-icons/fa'
 
+const LAUNCH_DATE = "2022-06-18"
+
 export default function CompletedPopup(props) {
 
 	const {time, moves} = props
@@ -12,6 +14,7 @@ export default function CompletedPopup(props) {
 	const [averageMoves, setAverageMoves] = useState(0)
 	const [gamesPlayed, setGamesPlayed] = useState(1)
 	const [gamesCompleted, setGamesCompleted] = useState(1)
+	const [worteenNumber, setWorteenNumber] = useState(1)
 
 	const [showCopiedToast, setShowCopiedToast] = useState(false)
 	
@@ -27,6 +30,12 @@ export default function CompletedPopup(props) {
 		setAverageMoves(localStorage.getItem("AverageMoves") ? JSON.parse(localStorage.getItem("AverageMoves")) : moves)
 		setGamesPlayed(localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) : 1)
 		setGamesCompleted(localStorage.getItem("GamesCompleted") ? JSON.parse(localStorage.getItem("GamesCompleted")) : 1)
+
+		// set worteen number from launch date
+		const launchDate = new Date(LAUNCH_DATE)
+		const today = new Date()
+
+		setWorteenNumber(Math.floor((today - launchDate) / (1000 * 24 * 60 * 60)) + 1)
 	}, [])
 
 	const share = async () => {
@@ -35,7 +44,7 @@ export default function CompletedPopup(props) {
 		const moveStr = moves.toString()
 		if ('clipboard' in navigator) {
 			success = await navigator.clipboard.writeText(
-				"Worteen 1\n" +
+				"Worteen " + worteenNumber + "\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
@@ -46,7 +55,7 @@ export default function CompletedPopup(props) {
 		}
 		else {
 			success = document.execCommand('copy', true,
-				"Worteen 1\n" +
+				"Worteen " + worteenNumber + "\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
 				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
