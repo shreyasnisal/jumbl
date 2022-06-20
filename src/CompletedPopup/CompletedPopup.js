@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react'
 import './CompletedPopup.css'
-import {FaShareAlt} from 'react-icons/fa'
+import {FaShareAlt, FaWindowClose} from 'react-icons/fa'
 
 const LAUNCH_DATE = "2022-06-18"
 
 export default function CompletedPopup(props) {
 
-	const {time, moves} = props
+	const {time, moves, onClose} = props
 
 	const [currentStreak, setCurrentStreak] = useState(0)
 	const [maximumStreak, setMaximumStreak] = useState(0)
@@ -96,7 +96,10 @@ export default function CompletedPopup(props) {
 					<p>Copied to Clipboard</p>
 				</div>
 			}
-			<h3>Statistics</h3>
+			<button className = "Close-Btn" onClick={onClose}>
+				<FaWindowClose color = {"#fff"} size = {24} />
+			</button>
+			<h3>Worteen {worteenNumber}</h3>
 			<div className = "Row">
 				<div className = "Column">
 					<p className = "Value">{Math.floor(time / 60) + ":" + (time % 60 < 10 ? "0" : "") + (time % 60)}</p>

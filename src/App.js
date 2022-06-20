@@ -8,8 +8,10 @@ import {getTimerRunning, startStopTimer} from './common/helper.js'
 import CompletedPopup from './CompletedPopup/CompletedPopup';
 import InstructionsPopup from './InstructionsPopup/InstructionsPopup';
 import {FaInfoCircle} from 'react-icons/fa'
+import {MdLeaderboard} from 'react-icons/md'
 import preloader from './preloader.gif'
 
+let fetching = false
 
 function App() {
 
@@ -30,12 +32,15 @@ function App() {
   const [averageTime, setAverageTime] = useState(0)
   const [averageMoves, setAverageMoves] = useState(0)
   const [showInstructions, setShowInstructions] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [completedPopupVisible, setCompletedPopupVisible] = useState(true)
 
   useEffect(() => {
 
     // Initialize puzzle
 		const fetchData = async () => {
+
+      console.log("Fetching")
 
       if (!localStorage.getItem("GamesPlayed")) {
         setShowInstructions(true)
@@ -65,29 +70,40 @@ function App() {
 
 			try {
 				// const localDate = new Date()
-				const response = await fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate), {
+				fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate), {
           method: "GET",
           mode: 'cors',
 					credentials: 'same-origin',
 					headers: {
 						'Accept': 'application/json',
 					}
-				})
-				const responseJson = await response.json()
-				setTiles(JSON.parse(responseJson))
-        setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
-        localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
-        if (responseJson.length > 0) {
-          setLoading(false)
-        }
+				}).then(async response => {
+          response.json().then(responseJson => {
+            setTiles(JSON.parse(responseJson))
+            setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
+            localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
+            if (responseJson.length > 0) {
+              setLoading(false)
+            }
+          })
+        })
       }
 			catch (err) {
 				console.log(err)
 			}
 		}
 
-		fetchData()
+    if (!fetching) {
+      fetchData()
+      fetching = true
+    }
 	}, [])
+
+  useEffect(() => {
+    if (worteenDate && tiles && tiles.length > 0) {
+      localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
+    }
+  }, [worteenDate, tiles])
 
   useEffect(() => {
     if (lastWorteenCompleted) {
@@ -111,11 +127,6 @@ function App() {
       if (tiles.length === 0) {
         return
       }
-
-      localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
-      localStorage.setItem(worteenDate + "time", JSON.stringify(time))
-      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))
-      localStorage.setItem(worteenDate + "completed", JSON.stringify(isCompleted))
     }
 
     window.addEventListener("beforeunload", saveData)
@@ -140,7 +151,7 @@ function App() {
     }
 
 		let tileIndex
-		if (key === "ArrowDown") {
+		if (key === "ArrowDown" && tiles.indexOf(0) - 4 >= 0) {
 			tileIndex = tiles.indexOf(0) - 4
 		}
 		else if (key === "ArrowUp" && tiles.indexOf(0) + 4 < 16) {
@@ -178,9 +189,17 @@ function App() {
 		}
 	}
 
+  useEffect(() => {
+    if (worteenDate) {
+      localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
+      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))
+    }
+  }, [moves, tiles])
+
   // handling timer
   useEffect(() => {
 		if (timerRunning) {
+      localStorage.setItem(worteenDate + "time", JSON.stringify(time))
 			setTimeout(() => setTime(time + 1), 1000)
 		}
 	}, [time])
@@ -222,6 +241,8 @@ function App() {
       if (Math.floor((now - lastWorteenDate) / (1000 * 24 * 60 * 60)) != 0) {
         localStorage.setItem("GamesCompleted", JSON.stringify(gamesCompleted + 1))
       
+        localStorage.setItem(worteenDate + "completed", JSON.stringify(isCompleted))
+
         localStorage.setItem("AverageTime", JSON.stringify((gamesCompleted * averageTime + time) / (gamesCompleted + 1)))
         localStorage.setItem("AverageMoves", JSON.stringify((gamesCompleted * averageMoves + moves) / (gamesCompleted + 1)))
 
@@ -301,20 +322,23 @@ function App() {
   }
 
   return (
-    <div className = "App">
+    <div className = "App" >
       <div className = "Header">
         <h1>Worteen</h1>
-        <FaInfoCircle color = {"#fff"} size = {24} onClick = {() => setShowInstructions(true)} />
+        <div className = "Right-Icons">
+          <FaInfoCircle color = {"#fff"} size = {24} onClick = {() => setShowInstructions(true)} />
+          <MdLeaderboard color = {isCompleted ? "#fff" : "#777"} size = {24} onClick = {() => isCompleted ? setCompletedPopupVisible(true) : null} />
+        </div>
       </div>
       {!([...correctTiles].length == 0 || [...correctTiles].includes(0) || isCompleted) &&
 				<div className = "Completion-Toast">
 					<h4>{getCompliment()}</h4>
 				</div>
 			}
-			{isCompleted &&
+			{isCompleted && completedPopupVisible &&
         <>
           <div className = "Overlay" />
-				  <CompletedPopup className = "Completion-Popup-Container" time = {time} moves = {moves} />
+				  <CompletedPopup className = "Completion-Popup-Container" time = {time} moves = {moves} onClose = {() => setCompletedPopupVisible(false)} />
         </>
       }
       {showInstructions &&

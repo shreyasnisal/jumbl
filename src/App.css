@@ -23,10 +23,13 @@ body {
   position: absolute;
 }
 
-.Header svg {
+.Header .Right-Icons {
   margin-left: auto;
-  margin-right: 30px;
   cursor: pointer;
+}
+
+.Header .Right-Icons svg {
+  margin-right: 30px;
 }
 
 .Header h1 {
