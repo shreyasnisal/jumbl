@@ -10,6 +10,7 @@ import InstructionsPopup from './InstructionsPopup/InstructionsPopup';
 import {FaInfoCircle} from 'react-icons/fa'
 import {MdLeaderboard} from 'react-icons/md'
 import preloader from './preloader.gif'
+import { useSwipeable } from 'react-swipeable';
 
 let fetching = false
 
@@ -171,6 +172,33 @@ function App() {
 		swapTiles(index)
 	}
 
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: (eventData) => {
+      if (tiles.indexOf(0) % 4 + 1 < 4) {
+        swapTiles(tiles.indexOf(0) + 1)
+      }
+    },
+
+    onSwipedRight: (eventData) => {
+      if (tiles.indexOf(0) % 4 - 1 >= 0) {
+        swapTiles(tiles.indexOf(0) - 1)
+      }
+    },
+
+    onSwipedDown: (eventData) => {
+      if (tiles.indexOf(0) - 4 >= 0) {
+        swapTiles(tiles.indexOf(0) - 4)
+      }
+    },
+
+    onSwipedUp: (eventData) => {
+      if (tiles.indexOf(0) + 4 < 16) {
+        swapTiles(tiles.indexOf(0) + 4)
+      }
+    }
+
+  })
+
   const swapTiles = (tileIndex) => {
 
 		if (canSwap(tileIndex, tiles.indexOf(0))) {
@@ -327,7 +355,7 @@ function App() {
   }
 
   return (
-    <div className = "App" >
+    <div className = "App" {...swipeHandlers}>
       <div className = "Header">
         <h1>Worteen</h1>
         <div className = "Right-Icons">
