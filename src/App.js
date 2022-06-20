@@ -272,12 +272,13 @@ function App() {
       const now = new Date()
 
       if (Math.floor((now - lastWorteenDate) / (1000 * 24 * 60 * 60)) != 0) {
-        localStorage.setItem("GamesCompleted", JSON.stringify(gamesCompleted + 1))
       
+        localStorage.setItem("GamesCompleted", JSON.stringify(gamesCompleted + 1))
+
         localStorage.setItem(worteenDate + "completed", JSON.stringify(isCompleted))
 
-        localStorage.setItem("AverageTime", JSON.stringify((gamesCompleted * averageTime + time) / (gamesCompleted + 1)))
-        localStorage.setItem("AverageMoves", JSON.stringify((gamesCompleted * averageMoves + moves) / (gamesCompleted + 1)))
+        localStorage.setItem("AverageTime", JSON.stringify(Math.floor((gamesCompleted * averageTime + time) / (gamesCompleted + 1))))
+        localStorage.setItem("AverageMoves", JSON.stringify(Math.floor((gamesCompleted * averageMoves + moves) / (gamesCompleted + 1))))
 
         if (isCurrentStreak) {
           localStorage.setItem("CurrentStreak", JSON.stringify(JSON.parse(localStorage.getItem("CurrentStreak")) + 1))

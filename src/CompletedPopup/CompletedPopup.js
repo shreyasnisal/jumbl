@@ -44,24 +44,16 @@ export default function CompletedPopup(props) {
 		const moveStr = moves.toString()
 		if ('clipboard' in navigator) {
 			success = await navigator.clipboard.writeText(
-				"Worteen " + worteenNumber + "\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"Time: " + timeStr +
-				", Moves: " + moveStr
+				"Worteen " + worteenNumber + String.fromCharCode(9989) + "\n" +
+				String.fromCharCode(9201) + timeStr + "\n" +
+				String.fromCharCode(11013) + String.fromCharCode(10145) + String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
 		}
 		else {
 			success = document.execCommand('copy', true,
-				"Worteen " + worteenNumber + "\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"\uD83D\uDFE9\uD83D\uDFE9\uD83D\uDFE9\n" +
-				"Time: " + timeStr +
-				", Moves: " + moveStr
+				"Worteen " + worteenNumber + String.fromCharCode(9989) + "\n" +
+				String.fromCharCode(9201) + timeStr + "\n" +
+				String.fromCharCode(11013) + String.fromCharCode(10145) + String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
 		}
 
@@ -88,6 +80,11 @@ export default function CompletedPopup(props) {
 
 		return () => clearInterval(interval)
 	}, [])
+
+	useEffect(() => {
+		console.log(time)
+		console.log(averageTime)
+	}, [time, averageTime])
 
 	return (
 		<div className = "Completed-Popup">
