@@ -189,7 +189,15 @@ function App() {
   useEffect(() => {
     if (worteenDate) {
       localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
-      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))  
+      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))
+
+      for (let item in {...localStorage}) {
+        if (item.match(/^\d/)) {
+          if (!item.startsWith(worteenDate)) {
+            localStorage.removeItem(item)
+          }
+        }
+      }
     }
   }, [moves, tiles])
 
