@@ -81,11 +81,6 @@ export default function CompletedPopup(props) {
 		return () => clearInterval(interval)
 	}, [])
 
-	useEffect(() => {
-		console.log(time)
-		console.log(averageTime)
-	}, [time, averageTime])
-
 	return (
 		<div className = "Completed-Popup">
 			{showCopiedToast && 
