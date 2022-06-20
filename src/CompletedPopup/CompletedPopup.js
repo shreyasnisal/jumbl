@@ -148,7 +148,7 @@ export default function CompletedPopup(props) {
 				<h3 className = "Next-Worteen-Label">Next Worteen</h3>
 			</div>
 			<div className = "Row">
-				{secondsToNextWorteen != 0 && minutesToNextWorteen != 0 && hoursToNextWorteen != 0 &&
+				{(secondsToNextWorteen != 0 || minutesToNextWorteen != 0 || hoursToNextWorteen != 0) &&
 					<p className = "Next-Worteen-Timer">
 						{hoursToNextWorteen}:{(minutesToNextWorteen < 10 ? "0" : "")}{minutesToNextWorteen}:{secondsToNextWorteen < 10 ? "0" : ""}{secondsToNextWorteen}
 					</p>

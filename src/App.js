@@ -22,7 +22,7 @@ function App() {
 	const [time, setTime] = useState(0)
 	const [timerRunning, setTimerRunning] = useState(false)
 	const [compliment, setCompliment] = useState("")
-  const [swapDisabled, setSwapDisabled] = useState(false)
+  const [swapDisabled, setSwapDisabled] = useState(true)
   const [worteenDate, setWorteenDate] = useState("")
   const [gamesPlayed, setGamesPlayed] = useState(0)
   const [gamesCompleted, setGamesCompleted] = useState(0)
@@ -32,15 +32,13 @@ function App() {
   const [averageTime, setAverageTime] = useState(0)
   const [averageMoves, setAverageMoves] = useState(0)
   const [showInstructions, setShowInstructions] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [completedPopupVisible, setCompletedPopupVisible] = useState(true)
 
   useEffect(() => {
 
     // Initialize puzzle
 		const fetchData = async () => {
-
-      console.log("Fetching")
 
       if (!localStorage.getItem("GamesPlayed")) {
         setShowInstructions(true)
@@ -63,6 +61,10 @@ function App() {
         setIsCompleted(JSON.parse(localStorage.getItem(dateString + "isCompleted")))
         // setWorteenDate(dateString)
 
+        if (!JSON.parse(localStorage.getItem(dateString + "isCompleted"))) {
+          setSwapDisabled(false)
+        }
+
         setLoading(false)
 
         return
@@ -84,6 +86,7 @@ function App() {
             localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
             if (responseJson.length > 0) {
               setLoading(false)
+              setSwapDisabled(false)
             }
           })
         })
@@ -98,12 +101,6 @@ function App() {
       fetching = true
     }
 	}, [])
-
-  useEffect(() => {
-    if (worteenDate && tiles && tiles.length > 0) {
-      localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
-    }
-  }, [worteenDate, tiles])
 
   useEffect(() => {
     if (lastWorteenCompleted) {
@@ -192,7 +189,7 @@ function App() {
   useEffect(() => {
     if (worteenDate) {
       localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
-      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))
+      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))  
     }
   }, [moves, tiles])
 
