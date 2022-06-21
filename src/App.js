@@ -73,7 +73,7 @@ function App() {
 
 			try {
 				// const localDate = new Date()
-				fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate), {
+				fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate.getTime() - (localDate.getTimezoneOffset() * 60000)), {
           method: "GET",
           mode: 'cors',
 					credentials: 'same-origin',
