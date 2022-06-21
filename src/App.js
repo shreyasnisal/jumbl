@@ -174,24 +174,40 @@ function App() {
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: (eventData) => {
+      if (swapDisabled) {
+        return
+      }
+
       if (tiles.indexOf(0) % 4 + 1 < 4) {
         swapTiles(tiles.indexOf(0) + 1)
       }
     },
 
     onSwipedRight: (eventData) => {
+      if (swapDisabled) {
+        return
+      }
+
       if (tiles.indexOf(0) % 4 - 1 >= 0) {
         swapTiles(tiles.indexOf(0) - 1)
       }
     },
 
     onSwipedDown: (eventData) => {
+      if (swapDisabled) {
+        return
+      }
+
       if (tiles.indexOf(0) - 4 >= 0) {
         swapTiles(tiles.indexOf(0) - 4)
       }
     },
 
     onSwipedUp: (eventData) => {
+      if (swapDisabled) {
+        return
+      }
+      
       if (tiles.indexOf(0) + 4 < 16) {
         swapTiles(tiles.indexOf(0) + 4)
       }
