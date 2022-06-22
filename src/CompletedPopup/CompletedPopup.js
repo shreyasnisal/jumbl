@@ -36,7 +36,7 @@ export default function CompletedPopup(props) {
 		const today = new Date()
 
 		setWorteenNumber(Math.floor((today - launchDate) / (1000 * 24 * 60 * 60)) + 1)
-	}, [])
+	}, [time, moves])
 
 	const share = async () => {
 		let success = false

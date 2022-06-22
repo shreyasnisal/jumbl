@@ -29,6 +29,7 @@ function App() {
   const [gamesCompleted, setGamesCompleted] = useState(0)
   const [maximumStreak, setMaximumStreak] = useState(0)
   const [lastWorteenCompleted, setLastWorteenCompleted] = useState(null)
+  const [currentStreak, setCurrentStreak] = useState(0)
   const [isCurrentStreak, setIsCurrentStreak] = useState(false)
   const [averageTime, setAverageTime] = useState(0)
   const [averageMoves, setAverageMoves] = useState(0)
@@ -49,7 +50,7 @@ function App() {
       const dateString = "" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate()
       setWorteenDate(dateString)
 
-      setGamesCompleted(localStorage.getItem("GamesCompleted") ? JSON.parse(localStorage.getItem("gamesCompleted")) : 0)
+      setGamesCompleted(localStorage.getItem("GamesCompleted") ? JSON.parse(localStorage.getItem("GamesCompleted")) : 0)
       setMaximumStreak(localStorage.getItem("MaximumStreak") ? JSON.parse(localStorage.getItem("MaximumStreak")) : 0)
       setLastWorteenCompleted(localStorage.getItem("LastWorteenCompleted") ? JSON.parse(localStorage.getItem("LastWorteenCompleted")) : null)
       setAverageTime(localStorage.getItem("AverageTime") ? JSON.parse(localStorage.getItem("AverageTime")) : 0)
@@ -108,7 +109,7 @@ function App() {
       const lastWorteenDate = new Date(lastWorteenCompleted)
       const now = new Date()
 
-      if ((now - lastWorteenDate) / (1000 * 60 * 60 * 24) <= 1) {
+      if (Math.floor((now - lastWorteenDate) / (1000 * 60 * 60 * 24)) <= 1) {
         setIsCurrentStreak(true)
       }
     }
@@ -296,11 +297,9 @@ function App() {
         localStorage.setItem("AverageTime", JSON.stringify(Math.floor((gamesCompleted * averageTime + time) / (gamesCompleted + 1))))
         localStorage.setItem("AverageMoves", JSON.stringify(Math.floor((gamesCompleted * averageMoves + moves) / (gamesCompleted + 1))))
 
-        if (isCurrentStreak) {
-          localStorage.setItem("CurrentStreak", JSON.stringify(JSON.parse(localStorage.getItem("CurrentStreak")) + 1))
-          if (localStorage.getItem("CurrentStreak") > maximumStreak) {
-            localStorage.setItem("MaximumStreak", JSON.stringify(localStorage.getItem("CurrentStreak")))
-          }
+        localStorage.setItem("CurrentStreak", JSON.stringify(JSON.parse(localStorage.getItem("CurrentStreak")) + 1))
+        if (localStorage.getItem("CurrentStreak") > maximumStreak) {
+          localStorage.setItem("MaximumStreak", localStorage.getItem("CurrentStreak"))
         }
 
         localStorage.setItem("LastWorteenCompleted", JSON.stringify(worteenDate))
@@ -388,7 +387,12 @@ function App() {
 			{isCompleted && completedPopupVisible &&
         <>
           <div className = "Overlay" />
-				  <CompletedPopup className = "Completion-Popup-Container" time = {time} moves = {moves} onClose = {() => setCompletedPopupVisible(false)} />
+				  <CompletedPopup
+            className = "Completion-Popup-Container"
+            time = {time}
+            moves = {moves}
+            onClose = {() => setCompletedPopupVisible(false)}
+          />
         </>
       }
       {showInstructions &&
