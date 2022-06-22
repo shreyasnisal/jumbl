@@ -108,7 +108,7 @@ function App() {
       const lastWorteenDate = new Date(lastWorteenCompleted)
       const now = new Date()
 
-      if ((now - lastWorteenDate) / (1000 * 60 * 60 * 24) < 1) {
+      if ((now - lastWorteenDate) / (1000 * 60 * 60 * 24) <= 1) {
         setIsCurrentStreak(true)
       }
     }
