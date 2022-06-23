@@ -208,7 +208,9 @@ function App() {
       if (tiles.indexOf(0) + 4 < 16) {
         swapTiles(tiles.indexOf(0) + 4)
       }
-    }
+    },
+
+    preventScrollOnSwipe: true
 
   })
 
