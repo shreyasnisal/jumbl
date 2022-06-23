@@ -26,10 +26,13 @@ body {
 .Header .Right-Icons {
   margin-left: auto;
   cursor: pointer;
+  margin-right: 20px;
+  position: relative;
+  top: 4px;
 }
 
 .Header .Right-Icons svg {
-  margin-right: 30px;
+  margin-left: 10px;
 }
 
 .Header h1 {

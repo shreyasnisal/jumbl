@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import './CompletedPopup.css'
 import {FaShareAlt, FaWindowClose} from 'react-icons/fa'
+import {MdClear} from 'react-icons/md'
 
 const LAUNCH_DATE = "2022-06-18"
 
@@ -44,16 +45,16 @@ export default function CompletedPopup(props) {
 		const moveStr = moves.toString()
 		if ('clipboard' in navigator) {
 			success = await navigator.clipboard.writeText(
-				"Worteen " + worteenNumber + String.fromCharCode(9989) + "\n" +
+				"Worteen " + worteenNumber +  " " + String.fromCharCode(9989) + "\n" +
 				String.fromCharCode(9201) + timeStr + "\n" +
-				String.fromCharCode(11013) + String.fromCharCode(10145) + String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
+				String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
 		}
 		else {
 			success = document.execCommand('copy', true,
-				"Worteen " + worteenNumber + String.fromCharCode(9989) + "\n" +
+				"Worteen " + worteenNumber + " " + String.fromCharCode(9989) + "\n" +
 				String.fromCharCode(9201) + timeStr + "\n" +
-				String.fromCharCode(11013) + String.fromCharCode(10145) + String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
+				String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
 		}
 
@@ -89,7 +90,7 @@ export default function CompletedPopup(props) {
 				</div>
 			}
 			<button className = "Close-Btn" onClick={onClose}>
-				<FaWindowClose color = {"#fff"} size = {24} />
+				<MdClear color = {"#fff"} size = {24} />
 			</button>
 			<h3>Worteen {worteenNumber}</h3>
 			<div className = "Row">
@@ -98,26 +99,28 @@ export default function CompletedPopup(props) {
 					<p className = "Label">Time</p>
 				</div>
 				<div className = "Column">
+					<p className = "Value">{moves}</p>
+					<p className = "Label">Moves</p>
+				</div>
+			</div>
+			<div className = "Row">
+				<div className = "Column">
 					<p className = "Value">{Math.floor(averageTime / 60) + ":" + (averageTime % 60 < 10 ? "0" : "") + (averageTime % 60)}</p>
 					<p className = "Label">Average Time</p>
 				</div>
 				<div className = "Column">
-					<p className = "Value">{moves}</p>
-					<p className = "Label">Moves</p>
-				</div>
-				<div className = "Column">
 					<p className = "Value">{averageMoves}</p>
 					<p className = "Label">Average Moves</p>
+				</div>
+				<div className = "Column">
+					<p className = "Value">{Math.round(gamesCompleted / gamesPlayed * 100)}</p>
+					<p className = "Label">Completion %</p>
 				</div>
 			</div>
 			<div className = "Row">
 				<div className = "Column">
 					<p className = "Value">{gamesPlayed}</p>
 					<p className = "Label">Played</p>
-				</div>
-				<div className = "Column">
-					<p className = "Value">{Math.round(gamesCompleted / gamesPlayed * 100)}</p>
-					<p className = "Label">Completion %</p>
 				</div>
 				<div className = "Column">
 					<p className = "Value">{currentStreak}</p>
