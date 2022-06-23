@@ -72,30 +72,26 @@ function App() {
         return
       }
 
-			try {
-				// const localDate = new Date()
-				fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate.getTime() - (localDate.getTimezoneOffset() * 60000)), {
-          method: "GET",
-          mode: 'cors',
-					credentials: 'same-origin',
-					headers: {
-						'Accept': 'application/json',
-					}
-				}).then(async response => {
-          response.json().then(responseJson => {
-            setTiles(JSON.parse(responseJson))
-            setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
-            localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
-            if (responseJson.length > 0) {
-              setLoading(false)
-              setSwapDisabled(false)
-            }
-          })
+      fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate.getTime() - (localDate.getTimezoneOffset() * 60000)), {
+        method: "GET",
+        mode: 'cors',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+        }
+      }).then(async response => {
+        response.json().then(responseJson => {
+          setTiles(JSON.parse(responseJson))
+          setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
+          localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
+          if (responseJson.length > 0) {
+            setLoading(false)
+            setSwapDisabled(false)
+          }
         })
-      }
-			catch (err) {
-				console.log(err)
-			}
+      }).catch(err => {
+        fetchData()
+      })
 		}
 
     if (!fetching) {
@@ -248,8 +244,10 @@ function App() {
 
   // handling timer
   useEffect(() => {
-		if (timerRunning) {
+    if (worteenDate) {
       localStorage.setItem(worteenDate + "time", JSON.stringify(time))
+    }
+      if (timerRunning) {
 			setTimeout(() => setTime(time + 1), 1000)
 		}
 	}, [time])
