@@ -11,6 +11,9 @@ import {FaInfoCircle} from 'react-icons/fa'
 import {MdLeaderboard} from 'react-icons/md'
 import preloader from './preloader.gif'
 import { useSwipeable } from 'react-swipeable';
+import ReactGA from 'react-ga4'
+
+const GA_MEASUREMENT_ID = "G-BLHYNFEYJD"
 
 let fetching = false
 
@@ -38,6 +41,10 @@ function App() {
   const [completedPopupVisible, setCompletedPopupVisible] = useState(true)
 
   useEffect(() => {
+
+    // initialize google analytics
+    ReactGA.initialize(GA_MEASUREMENT_ID)
+    ReactGA.send("pageview");
 
     // Initialize puzzle
 		const fetchData = async () => {
@@ -341,7 +348,9 @@ function App() {
 					}
 				}
 
-				setCorrectTiles([...greenTiles])
+        if (greenTiles.length > 0) {
+				  setCorrectTiles([...greenTiles])
+        }
 			}
 			catch (err) {
 				console.log(err)
