@@ -38,7 +38,7 @@ function App() {
   const [averageMoves, setAverageMoves] = useState(0)
   const [showInstructions, setShowInstructions] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [completedPopupVisible, setCompletedPopupVisible] = useState(true)
+  const [completedPopupVisible, setCompletedPopupVisible] = useState(false)
 
   useEffect(() => {
 
@@ -310,8 +310,10 @@ function App() {
         }
 
         localStorage.setItem("LastWorteenCompleted", JSON.stringify(worteenDate))
+
       }
       setSwapDisabled(true)
+      setCompletedPopupVisible(true)
     }
   }, [isCompleted])
 
