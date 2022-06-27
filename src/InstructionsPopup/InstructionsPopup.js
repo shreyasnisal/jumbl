@@ -27,7 +27,7 @@ export default function InstructionsPopup(props) {
 				}
 				<hr />
 				<h5>Example</h5>
-				<img src = {exampleImage} width = "200px" height = "200px" />
+				<img src = {exampleImage} width = "200px" height = "200px" alt = "sample solved jumbl" />
 			</div>
 		</div>
 	)

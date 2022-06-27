@@ -376,7 +376,7 @@ function App() {
   if (loading) {
     return (
       <div className = "Fullscreen">
-        <img src = {preloader} className = "Preloader" />
+        <img src = {preloader} className = "Preloader" alt = "preloader" />
       </div>
     )
   }
