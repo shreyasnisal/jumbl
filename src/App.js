@@ -27,11 +27,11 @@ function App() {
 	const [timerRunning, setTimerRunning] = useState(false)
 	const [compliment, setCompliment] = useState("")
   const [swapDisabled, setSwapDisabled] = useState(true)
-  const [worteenDate, setWorteenDate] = useState("")
+  const [jumblDate, setJumblDate] = useState("")
   const [gamesPlayed, setGamesPlayed] = useState(0)
   const [gamesCompleted, setGamesCompleted] = useState(0)
   const [maximumStreak, setMaximumStreak] = useState(0)
-  const [lastWorteenCompleted, setLastWorteenCompleted] = useState(null)
+  const [lastJumblCompleted, setLastJumblCompleted] = useState(null)
   const [currentStreak, setCurrentStreak] = useState(0)
   const [isCurrentStreak, setIsCurrentStreak] = useState(false)
   const [averageTime, setAverageTime] = useState(0)
@@ -55,11 +55,11 @@ function App() {
 
       const localDate = new Date()
       const dateString = "" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate()
-      setWorteenDate(dateString)
+      setJumblDate(dateString)
 
       setGamesCompleted(localStorage.getItem("GamesCompleted") ? JSON.parse(localStorage.getItem("GamesCompleted")) : 0)
       setMaximumStreak(localStorage.getItem("MaximumStreak") ? JSON.parse(localStorage.getItem("MaximumStreak")) : 0)
-      setLastWorteenCompleted(localStorage.getItem("LastWorteenCompleted") ? JSON.parse(localStorage.getItem("LastWorteenCompleted")) : null)
+      setLastJumblCompleted(localStorage.getItem("LastJumblCompleted") ? JSON.parse(localStorage.getItem("LastJumblCompleted")) : null)
       setAverageTime(localStorage.getItem("AverageTime") ? JSON.parse(localStorage.getItem("AverageTime")) : 0)
       setAverageMoves(localStorage.getItem("AverageMoves") ? JSON.parse(localStorage.getItem("AverageMoves")) : 0)
 
@@ -68,7 +68,7 @@ function App() {
         setMoves(JSON.parse(localStorage.getItem(dateString + "moves")))
         setTiles(JSON.parse(localStorage.getItem(dateString + "tiles")))
         setIsCompleted(JSON.parse(localStorage.getItem(dateString + "isCompleted")))
-        // setWorteenDate(dateString)
+        // setJumblDate(dateString)
 
         if (!JSON.parse(localStorage.getItem(dateString + "isCompleted"))) {
           setSwapDisabled(false)
@@ -79,7 +79,7 @@ function App() {
         return
       }
 
-      fetch('https://worteen-backend.vercel.app/?date=' + JSON.stringify(localDate.getTime() - (localDate.getTimezoneOffset() * 60000)), {
+      fetch('https://jumbl-api.vercel.app/?date=' + JSON.stringify(localDate.getTime() - (localDate.getTimezoneOffset() * 60000)), {
         method: "GET",
         mode: 'cors',
         credentials: 'same-origin',
@@ -89,7 +89,7 @@ function App() {
       }).then(async response => {
         response.json().then(responseJson => {
           setTiles(JSON.parse(responseJson))
-          setWorteenDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
+          setJumblDate("" + localDate.getFullYear() + "-" + (localDate.getMonth() + 1) + "-" + localDate.getDate())
           localStorage.setItem("GamesPlayed", localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) + 1 : 1)
           if (responseJson.length > 0) {
             setLoading(false)
@@ -108,21 +108,21 @@ function App() {
 	}, [])
 
   useEffect(() => {
-    if (lastWorteenCompleted) {
-      const lastWorteenDate = new Date(lastWorteenCompleted)
+    if (lastJumblCompleted) {
+      const lastJumblDate = new Date(lastJumblCompleted)
       const now = new Date()
 
-      if (Math.floor((now - lastWorteenDate) / (1000 * 60 * 60 * 24)) <= 1) {
+      if (Math.floor((now - lastJumblDate) / (1000 * 60 * 60 * 24)) <= 1) {
         setIsCurrentStreak(true)
       }
     }
-  }, [lastWorteenCompleted])
+  }, [lastJumblCompleted])
 
   // handle closing app
   useEffect(() => {
     const saveData = () => {
 
-      if (!worteenDate) {
+      if (!jumblDate) {
         return
       }
 
@@ -136,7 +136,7 @@ function App() {
     return () => {
       window.removeEventListener("beforeunload", saveData)
     }
-}, [time, tiles, moves, worteenDate])
+}, [time, tiles, moves, jumblDate])
 
   // handle tile swapping
 	useEffect(() => {
@@ -237,13 +237,13 @@ function App() {
 	}
 
   useEffect(() => {
-    if (worteenDate) {
-      localStorage.setItem(worteenDate + "tiles", JSON.stringify(tiles))
-      localStorage.setItem(worteenDate + "moves", JSON.stringify(moves))
+    if (jumblDate) {
+      localStorage.setItem(jumblDate + "tiles", JSON.stringify(tiles))
+      localStorage.setItem(jumblDate + "moves", JSON.stringify(moves))
 
       for (let item in {...localStorage}) {
         if (item.match(/^\d/)) {
-          if (!item.startsWith(worteenDate)) {
+          if (!item.startsWith(jumblDate)) {
             localStorage.removeItem(item)
           }
         }
@@ -253,8 +253,8 @@ function App() {
 
   // handling timer
   useEffect(() => {
-    if (worteenDate) {
-      localStorage.setItem(worteenDate + "time", JSON.stringify(time))
+    if (jumblDate) {
+      localStorage.setItem(jumblDate + "time", JSON.stringify(time))
     }
       if (timerRunning) {
 			setTimeout(() => setTime(time + 1), 1000)
@@ -283,7 +283,7 @@ function App() {
   useEffect(() => {
 		const greenTiles = [...correctTiles]
 		if (greenTiles.length > 0 && !greenTiles.includes(0)) {
-      // worteen completed
+      // jumbl completed
 			setTimerRunning(false)
       setSwapDisabled(true)
 			setTimeout(() => setIsCompleted(true), 1000)
@@ -292,14 +292,14 @@ function App() {
 
   useEffect(() => {
     if (isCompleted) {
-      const lastWorteenDate = new Date(lastWorteenCompleted)
+      const lastJumblDate = new Date(lastJumblCompleted)
       const now = new Date()
 
-      if (Math.floor((now - lastWorteenDate) / (1000 * 24 * 60 * 60)) != 0) {
+      if (Math.floor((now - lastJumblDate) / (1000 * 24 * 60 * 60)) != 0) {
       
         localStorage.setItem("GamesCompleted", JSON.stringify(gamesCompleted + 1))
 
-        localStorage.setItem(worteenDate + "completed", JSON.stringify(isCompleted))
+        localStorage.setItem(jumblDate + "completed", JSON.stringify(isCompleted))
 
         localStorage.setItem("AverageTime", JSON.stringify(Math.floor((gamesCompleted * averageTime + time) / (gamesCompleted + 1))))
         localStorage.setItem("AverageMoves", JSON.stringify(Math.floor((gamesCompleted * averageMoves + moves) / (gamesCompleted + 1))))
@@ -309,7 +309,7 @@ function App() {
           localStorage.setItem("MaximumStreak", localStorage.getItem("CurrentStreak"))
         }
 
-        localStorage.setItem("LastWorteenCompleted", JSON.stringify(worteenDate))
+        localStorage.setItem("LastJumblCompleted", JSON.stringify(jumblDate))
 
       }
       setSwapDisabled(true)
@@ -321,7 +321,7 @@ function App() {
 		const checkSolved = async () => {
 			try {
 				const response = await fetch(
-					"https://worteen-backend.vercel.app/check",
+					"https://jumbl-api.vercel.app/check",
 					{
 						method: "POST",
 						mode: 'cors',
@@ -384,7 +384,7 @@ function App() {
   return (
     <div className = "App" {...swipeHandlers}>
       <div className = "Header">
-        <h1>Worteen</h1>
+        <h1>Jumbl</h1>
         <div className = "Right-Icons">
           <FaInfoCircle color = {"#fff"} size = {24} onClick = {() => setShowInstructions(true)} />
           <MdLeaderboard color = {isCompleted ? "#fff" : "#777"} size = {24} onClick = {() => isCompleted ? setCompletedPopupVisible(true) : null} />

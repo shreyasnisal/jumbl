@@ -3,7 +3,7 @@
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "worteen_logo.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "120x120"
     }

@@ -3,7 +3,7 @@ import './CompletedPopup.css'
 import {FaShareAlt, FaWindowClose} from 'react-icons/fa'
 import {MdClear} from 'react-icons/md'
 
-const LAUNCH_DATE = "2022-06-18"
+const LAUNCH_DATE = "2022-06-27"
 
 export default function CompletedPopup(props) {
 
@@ -15,14 +15,14 @@ export default function CompletedPopup(props) {
 	const [averageMoves, setAverageMoves] = useState(0)
 	const [gamesPlayed, setGamesPlayed] = useState(1)
 	const [gamesCompleted, setGamesCompleted] = useState(1)
-	const [worteenNumber, setWorteenNumber] = useState(1)
+	const [jumblNumber, setJumblNumber] = useState(1)
 
 	const [showCopiedToast, setShowCopiedToast] = useState(false)
 	
-	// time to next worteen
-	const [hoursToNextWorteen, setHoursToNextWorteen] = useState(0)
-	const [minutesToNextWorteen, setMinutesToNextWorteen] = useState(0)
-	const [secondsToNextWorteen, setSecondsToNextWorteen] = useState(0)
+	// time to next jumbl
+	const [hoursToNextJumbl, setHoursToNextJumbl] = useState(0)
+	const [minutesToNextJumbl, setMinutesToNextJumbl] = useState(0)
+	const [secondsToNextJumbl, setSecondsToNextJumbl] = useState(0)
 
 	useEffect(() => {
 		setCurrentStreak(localStorage.getItem("CurrentStreak") ? JSON.parse(localStorage.getItem("CurrentStreak")) : 1)
@@ -32,11 +32,11 @@ export default function CompletedPopup(props) {
 		setGamesPlayed(localStorage.getItem("GamesPlayed") ? JSON.parse(localStorage.getItem("GamesPlayed")) : 1)
 		setGamesCompleted(localStorage.getItem("GamesCompleted") ? JSON.parse(localStorage.getItem("GamesCompleted")) : 1)
 
-		// set worteen number from launch date
+		// set jumbl number from launch date
 		const launchDate = new Date(LAUNCH_DATE)
 		const today = new Date()
 
-		setWorteenNumber(Math.floor((today - launchDate) / (1000 * 24 * 60 * 60)) + 1)
+		setJumblNumber(Math.floor((today - launchDate) / (1000 * 24 * 60 * 60)) + 1)
 	}, [time, moves])
 
 	const share = async () => {
@@ -45,14 +45,14 @@ export default function CompletedPopup(props) {
 		const moveStr = moves.toString()
 		if ('clipboard' in navigator) {
 			success = await navigator.clipboard.writeText(
-				"Worteen " + worteenNumber +  " " + String.fromCharCode(9989) + "\n" +
+				"Jumbl " + jumblNumber +  " " + String.fromCharCode(9989) + "\n" +
 				String.fromCharCode(9201) + timeStr + "\n" +
 				String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
 		}
 		else {
 			success = document.execCommand('copy', true,
-				"Worteen " + worteenNumber + " " + String.fromCharCode(9989) + "\n" +
+				"Jumbl " + jumblNumber + " " + String.fromCharCode(9989) + "\n" +
 				String.fromCharCode(9201) + timeStr + "\n" +
 				String.fromCharCode(11014) + " " + String.fromCharCode(11015) + " " + moveStr
 			);
@@ -70,13 +70,13 @@ export default function CompletedPopup(props) {
 			const timeToNext = nextTime.getTime() - now.getTime()
 
 			const h = Math.floor((timeToNext % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-			setHoursToNextWorteen(h)
+			setHoursToNextJumbl(h)
 
 			const m = Math.floor((timeToNext % (1000 * 60 * 60)) / (1000 * 60))
-			setMinutesToNextWorteen(m)
+			setMinutesToNextJumbl(m)
 
 			const s = Math.floor((timeToNext % (1000 * 60)) / (1000))
-			setSecondsToNextWorteen(s)
+			setSecondsToNextJumbl(s)
 		}, 1000)
 
 		return () => clearInterval(interval)
@@ -92,7 +92,7 @@ export default function CompletedPopup(props) {
 			<button className = "Close-Btn" onClick={onClose}>
 				<MdClear color = {"#fff"} size = {24} />
 			</button>
-			<h3>Worteen {worteenNumber}</h3>
+			<h3>Jumbl {jumblNumber}</h3>
 			<div className = "Row">
 				<div className = "Column">
 					<p className = "Value">{Math.floor(time / 60) + ":" + (time % 60 < 10 ? "0" : "") + (time % 60)}</p>
@@ -140,12 +140,12 @@ export default function CompletedPopup(props) {
 			</div>
 
 			<div className = "Row No-Margin">
-				<h3 className = "Next-Worteen-Label">Next Worteen</h3>
+				<h3 className = "Next-Jumbl-Label">Next Jumbl</h3>
 			</div>
 			<div className = "Row">
-				{(secondsToNextWorteen != 0 || minutesToNextWorteen != 0 || hoursToNextWorteen != 0) &&
-					<p className = "Next-Worteen-Timer">
-						{hoursToNextWorteen}:{(minutesToNextWorteen < 10 ? "0" : "")}{minutesToNextWorteen}:{secondsToNextWorteen < 10 ? "0" : ""}{secondsToNextWorteen}
+				{(secondsToNextJumbl != 0 || minutesToNextJumbl != 0 || hoursToNextJumbl != 0) &&
+					<p className = "Next-Jumbl-Timer">
+						{hoursToNextJumbl}:{(minutesToNextJumbl < 10 ? "0" : "")}{minutesToNextJumbl}:{secondsToNextJumbl < 10 ? "0" : ""}{secondsToNextJumbl}
 					</p>
 				}
 			</div>
