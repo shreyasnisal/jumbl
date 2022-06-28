@@ -36,7 +36,7 @@ export default function CompletedPopup(props) {
 		const launchDate = new Date(LAUNCH_DATE)
 		const today = new Date()
 
-		setJumblNumber(today.getDate() - launchDate.getDate() + 1)
+		setJumblNumber(today.getDate() - launchDate.getUTCDate() + 1)
 	}, [time, moves])
 
 	const share = async () => {
