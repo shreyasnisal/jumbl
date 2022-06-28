@@ -34,6 +34,7 @@ export default function CompletedPopup(props) {
 
 		// set jumbl number from launch date
 		const launchDate = new Date(LAUNCH_DATE)
+		launchDate.setHours(24, 0, 0, 0)
 		const today = new Date()
 
 		setJumblNumber(Math.floor((today - launchDate) / (1000 * 24 * 60 * 60)) + 1)
