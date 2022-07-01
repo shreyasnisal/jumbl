@@ -34,9 +34,10 @@ export default function CompletedPopup(props) {
 
 		// set jumbl number from launch date
 		const launchDate = new Date(LAUNCH_DATE)
+		const launchDateUTC = Date.UTC(launchDate.getUTCFullYear(), launchDate.getUTCMonth(), launchDate.getUTCDate())
 		const today = new Date()
 
-		setJumblNumber(today.getDate() - launchDate.getUTCDate() + 1)
+		setJumblNumber(Math.ceil((today - launchDateUTC) / (1000 * 24 * 60 * 60)))
 	}, [time, moves])
 
 	const share = async () => {
